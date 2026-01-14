@@ -1,0 +1,1 @@
+# ai-magic-affiliate-v2
