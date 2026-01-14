@@ -1,0 +1,156 @@
+.app {
+  max-width: 420px;
+  margin: auto;
+  padding: 16px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.card {
+  background: #ffffffcc;
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step {
+  background: #eee;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+}
+
+.required {
+  margin-left: auto;
+  color: #ff5a5a;
+  font-size: 12px;
+}
+
+.upload-box {
+  border: 2px dashed #f0b3d6;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin: 12px 0;
+  background: #fff5fb;
+}
+
+.upload-icon {
+  font-size: 28px;
+}
+
+.label {
+  font-size: 13px;
+  color: #777;
+  margin: 8px 0;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.chip {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.chip.active {
+  background: #ffe6f3;
+  border-color: #f4a3d5;
+}
+
+.toggle {
+  display: flex;
+  background: #eee;
+  border-radius: 14px;
+  padding: 4px;
+  margin: 12px 0;
+}
+
+.toggle-btn {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  background: transparent;
+}
+
+.toggle-btn.active {
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.select, .input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.ratio {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.ratio.active {
+  background: #ffe6f3;
+  border-color: #f4a3d5;
+}
+
+.cta {
+  margin-top: 10px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #8a4af3, #ff4fa3);
+  box-shadow: 0 10px 25px rgba(255,79,163,0.45);
+}
+
+.small-btn {
+  margin-left: auto;
+  border: none;
+  background: #ffe6f3;
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.result-box {
+  background: #ddd;
+  height: 180px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  color: #555;
+}
