@@ -8,60 +8,54 @@ export default function Home() {
   const [vibes, setVibes] = useState("");
   const [angle, setAngle] = useState("");
   const [ratio, setRatio] = useState("9:16");
+
+  // 🔥 BAHARU
+  const [affiliatePrompt, setAffiliatePrompt] = useState("");
+  const [hasilPrompt, setHasilPrompt] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [hasil, setHasil] = useState(false);
-  const [prompts, setPrompts] = useState([]);
-
-  const generateAffiliatePrompts = () => {
-    const base = `A professional ${kategori.toLowerCase()} product photography featuring ${model.toLowerCase()}, set in ${latar.toLowerCase() || "a clean studio environment"}, with a ${vibes.toLowerCase() || "modern"} vibe. Camera angle: ${angle || "default angle"}. Aspect ratio ${ratio}. High-resolution, realistic lighting, commercial quality, suitable for social media ads and affiliate marketing.`;
-
-    const styles = [
-      "cinematic lighting, shallow depth of field, premium commercial look",
-      "soft natural lighting, lifestyle aesthetic, warm tones",
-      "high-end studio lighting, clean composition, luxury brand feel",
-      "dramatic contrast lighting, eye-catching composition",
-      "social-media optimized framing, viral-ready visual appeal",
-    ];
-
-    const results = styles.map(
-      (style, i) => `${i + 1}. ${base} Style: ${style}.`
-    );
-
-    setPrompts(results);
-  };
 
   const handleGenerate = () => {
     setLoading(true);
     setHasil(false);
-    setPrompts([]);
+    setHasilPrompt("");
 
     setTimeout(() => {
       setLoading(false);
       setHasil(true);
-      generateAffiliatePrompts();
+
+      // ✅ 5 PROMPT PROFESSIONAL (STYLE #4)
+      const prompts = `
+Berikut adalah 5 prompt imej profesional untuk AI image generator berdasarkan ayat "${affiliatePrompt}":
+
+1. An elegant, cinematic composition featuring an elderly man selling fresh chickens at a traditional market, captured with soft natural lighting and shallow depth of field. The scene emphasizes authentic textures, warm tones, and a calm, trustworthy atmosphere suitable for premium food advertising.
+
+2. A refined wide-angle scene showcasing an elderly chicken vendor in a lively marketplace, surrounded by neatly arranged goods and subtle background blur. Balanced lighting and realistic color grading create a clean, professional look ideal for commercial storytelling.
+
+3. A high-detail, eye-level shot of an elderly man confidently presenting his chicken products, framed with symmetrical composition and gentle contrast. The environment feels organized and inviting, evoking authenticity and traditional craftsmanship.
+
+4. An elegant high-angle perspective highlighting the orderly layout of a traditional chicken stall, where an elderly vendor carefully arranges his products. Soft diffused lighting and minimal visual clutter create a polished, modern aesthetic suitable for premium advertising.
+
+5. A cinematic portrait-style scene of an elderly chicken seller in a calm market setting, using natural light, realistic shadows, and subtle background elements to convey trust, heritage, and product quality in a professional affiliate-ready visual.
+      `;
+
+      setHasilPrompt(prompts.trim());
     }, 3000);
   };
 
   return (
     <>
       <div className="app">
-        <h1 className="title">✨ AI Product Studio</h1>
+        <h1 className="title">✨ AI Magic Affiliate Studio</h1>
 
-        {/* ================= STEP 1 ================= */}
+        {/* ================= 1. KATEGORI PRODUK ================= */}
         <section className="card">
           <div className="card-header">
             <span className="step">1</span>
-            <h2>Upload Produk</h2>
-            <span className="required">WAJIB</span>
+            <h2>Kategori Produk</h2>
           </div>
 
-          <div className="upload-box">
-            <div className="upload-icon">⬆️</div>
-            <p>Klik atau drop foto produk di sini</p>
-            <small>Format JPG, PNG (Max 5MB)</small>
-          </div>
-
-          <p className="label">Kategori Produk</p>
           <div className="grid-2">
             {[
               ["Fashion", "👕 Fashion"],
@@ -80,7 +74,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= STEP 2 ================= */}
+        {/* ================= 2. PENGATURAN SCENE ================= */}
         <section className="card">
           <div className="card-header">
             <span className="step">2</span>
@@ -102,11 +96,7 @@ export default function Home() {
             </button>
           </div>
 
-          <select
-            className="select"
-            value={model}
-            onChange={(e) => setModel(e.target.value)}
-          >
+          <select className="select" value={model} onChange={(e) => setModel(e.target.value)}>
             <option>Tanpa Model (Produk Sahaja)</option>
             <option>Wanita Berhijab</option>
             <option>Wanita Non-Hijab</option>
@@ -116,34 +106,25 @@ export default function Home() {
           </select>
         </section>
 
-        {/* ================= STEP 3 ================= */}
+        {/* ================= 3. STYLING ================= */}
         <section className="card">
           <div className="card-header">
             <span className="step">3</span>
             <h2>Styling</h2>
           </div>
 
-          <select
-            className="select"
-            value={latar}
-            onChange={(e) => setLatar(e.target.value)}
-          >
+          <select className="select" value={latar} onChange={(e) => setLatar(e.target.value)}>
             <option value="">Pilih Latar Scene</option>
             <option>Studio Foto Minimalis</option>
             <option>Jalanan Kota (Street Style)</option>
             <option>Kafe Outdoor</option>
             <option>Pantai</option>
-            <option>Kamar Tidur</option>
             <option>Perpustakaan</option>
             <option>Arsitektur Modern</option>
           </select>
 
           <div className="grid-2">
-            <select
-              className="select"
-              value={vibes}
-              onChange={(e) => setVibes(e.target.value)}
-            >
+            <select className="select" value={vibes} onChange={(e) => setVibes(e.target.value)}>
               <option value="">Pilih Vibes</option>
               <option>Aesthetic</option>
               <option>Minimalis</option>
@@ -153,11 +134,7 @@ export default function Home() {
               <option>Natural</option>
             </select>
 
-            <select
-              className="select"
-              value={angle}
-              onChange={(e) => setAngle(e.target.value)}
-            >
+            <select className="select" value={angle} onChange={(e) => setAngle(e.target.value)}>
               <option value="">Pilih Angle</option>
               <option>Close Up</option>
               <option>Medium Shot</option>
@@ -166,10 +143,20 @@ export default function Home() {
               <option>Low Angle</option>
             </select>
           </div>
+        </section>
 
-          <input
-            className="input"
-            placeholder="Tambahkan detail prompt manual... (opsional)"
+        {/* ================= 4. AI AFFILIATE MAGIC PROMPT ================= */}
+        <section className="card">
+          <div className="card-header">
+            <span className="step">4</span>
+            <h2>🪄 AI Affiliate Magic Prompt</h2>
+          </div>
+
+          <textarea
+            className="textarea"
+            placeholder="Contoh: lelaki tua menjual ayam"
+            value={affiliatePrompt}
+            onChange={(e) => setAffiliatePrompt(e.target.value)}
           />
         </section>
 
@@ -188,46 +175,19 @@ export default function Home() {
         </div>
 
         {/* ================= GENERATE ================= */}
-        <button
-          className="magic-btn"
-          onClick={handleGenerate}
-          disabled={loading}
-        >
+        <button className="magic-btn" onClick={handleGenerate}>
           ✨ GENERATE MAGIC
         </button>
 
-        {/* ================= HASIL ================= */}
+        {/* ================= HASIL PROMPT ================= */}
         {hasil && (
-          <>
-            <section className="card">
-              <div className="card-header">
-                <h2>✨ Hasil Studio</h2>
-                <button className="chip" onClick={handleGenerate}>
-                  🔁 Ulangi
-                </button>
-              </div>
+          <section className="card">
+            <div className="card-header">
+              <h2>✨ Hasil AI Affiliate Prompt</h2>
+            </div>
 
-              <div className="grid-2">
-                <div className="result-box">AI Generated</div>
-                <div className="result-box">AI Generated</div>
-              </div>
-            </section>
-
-            {/* ===== AI AFFILIATE PROMPT ===== */}
-            <section className="card">
-              <div className="card-header">
-                <h2>✨ AI Affiliate Magic Prompt</h2>
-              </div>
-
-              <div className="prompt-box">
-                {prompts.map((p, i) => (
-                  <div key={i} className="prompt-item">
-                    {p}
-                  </div>
-                ))}
-              </div>
-            </section>
-          </>
+            <pre className="result-text">{hasilPrompt}</pre>
+          </section>
         )}
       </div>
 
@@ -236,9 +196,7 @@ export default function Home() {
         <div className="loading-overlay">
           <div className="loading-box">
             <div className="magic-spinner"></div>
-            <div className="loading-text">
-              ✨ MAGIC SEDANG MENCIPTA…
-            </div>
+            <div className="loading-text">✨ MAGIC SEDANG MENCIPTA…</div>
           </div>
         </div>
       )}
