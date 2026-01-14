@@ -1,49 +1,102 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  // ===============================
+  // STATE UTAMA
+  // ===============================
   const [kategori, setKategori] = useState("Fashion");
   const [model, setModel] = useState("Tanpa Model (Produk Sahaja)");
-  const [latar, setLatar] = useState("");
-  const [vibes, setVibes] = useState("");
-  const [angle, setAngle] = useState("");
+  const [latar, setLatar] = useState("Jalanan Kota");
+  const [vibes, setVibes] = useState("Aesthetic");
+  const [angle, setAngle] = useState("Full Body");
   const [ratio, setRatio] = useState("9:16");
 
   const [loading, setLoading] = useState(false);
-  const [hasilPrompt, setHasilPrompt] = useState("");
+  const [loadingText, setLoadingText] = useState("");
+  const [promptList, setPromptList] = useState([]);
+  const [activePrompt, setActivePrompt] = useState("");
 
-  // ================= GENERATE =================
+  // ===============================
+  // UX MAHAL – AI SEDANG BERFIKIR
+  // ===============================
+  const loadingSteps = [
+    "AI sedang menganalisis produk…",
+    "Menentukan gaya visual terbaik…",
+    "Meracik sudut kamera & komposisi…",
+    "Menjana prompt profesional…",
+  ];
+
+  useEffect(() => {
+    if (!loading) return;
+
+    let index = 0;
+    setLoadingText(loadingSteps[0]);
+
+    const interval = setInterval(() => {
+      index = (index + 1) % loadingSteps.length;
+      setLoadingText(loadingSteps[index]);
+    }, 800);
+
+    return () => clearInterval(interval);
+  }, [loading]);
+
+  // ===============================
+  // GENERATE PROMPT (OPENROUTER)
+  // ===============================
   const handleGenerate = async () => {
     setLoading(true);
-    setHasilPrompt("");
+    setPromptList([]);
+    setActivePrompt("");
+
+    const promptAI = `
+Berdasarkan maklumat berikut:
+
+Kategori produk: ${kategori}
+Jenis model: ${model}
+Latar lokasi: ${latar}
+Gaya visual: ${vibes}
+Sudut kamera: ${angle}
+Nisbah gambar: ${ratio}
+
+Tugasan:
+Hasilkan 5 PROMPT GAMBAR profesional untuk AI image generator.
+
+Syarat:
+- Bahasa English
+- Setiap prompt berbeza angle / komposisi
+- Gaya iklan premium & realistik
+- Sesuai untuk konten jualan & video pendek
+- Jangan beri penjelasan
+- Format bernombor 1 hingga 5
+`.trim();
 
     try {
-      const res = await fetch("/api/generate-prompt", {
+      const res = await fetch("/api/generate-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          kategori,
-          model,
-          latar,
-          vibes,
-          angle,
-          ratio,
-        }),
+        body: JSON.stringify({ prompt: promptAI }),
       });
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || "Ralat AI");
-      }
+      const list =
+        data?.result
+          ?.split("\n")
+          .filter((l) => l.trim().match(/^\d\./))
+          .map((l) => l.replace(/^\d\.\s*/, "")) || [];
 
-      setHasilPrompt(data.prompt);
+      setPromptList(list);
+      setActivePrompt(list[0] || "");
     } catch (err) {
-      alert("❌ AI gagal menjana prompt");
-    } finally {
-      setLoading(false);
+      alert("❌ Ralat semasa menjana prompt AI");
     }
+
+    setLoading(false);
   };
 
+  // ===============================
+  // UI
+  // ===============================
   return (
     <>
       <div className="app">
@@ -57,13 +110,13 @@ export default function Home() {
           </div>
 
           <div className="grid-2">
-            {["Fashion", "Aksesori", "FNB", "Lainnya"].map((k) => (
+            {["Fashion", "Aksesori", "F&B", "Lainnya"].map((item) => (
               <button
-                key={k}
-                className={`chip ${kategori === k ? "active" : ""}`}
-                onClick={() => setKategori(k)}
+                key={item}
+                className={`chip ${kategori === item ? "active" : ""}`}
+                onClick={() => setKategori(item)}
               >
-                {k}
+                {item}
               </button>
             ))}
           </div>
@@ -85,8 +138,6 @@ export default function Home() {
             <option>Wanita Berhijab</option>
             <option>Wanita Non-Hijab</option>
             <option>Pria</option>
-            <option>Anak Perempuan</option>
-            <option>Anak Laki-laki</option>
           </select>
         </section>
 
@@ -97,69 +148,112 @@ export default function Home() {
             <h2>Styling</h2>
           </div>
 
-          <select className="select" onChange={(e) => setLatar(e.target.value)}>
-            <option value="">Pilih Latar</option>
-            <option>Studio Foto Minimalis</option>
+          <select
+            className="select"
+            value={latar}
+            onChange={(e) => setLatar(e.target.value)}
+          >
             <option>Jalanan Kota</option>
+            <option>Studio Minimalis</option>
             <option>Kafe Outdoor</option>
-            <option>Pantai</option>
             <option>Kantor</option>
           </select>
 
-          <div className="grid-2">
-            <select className="select" onChange={(e) => setVibes(e.target.value)}>
-              <option value="">Pilih Vibes</option>
+          <div className="grid-2" style={{ marginTop: 12 }}>
+            <select
+              className="select"
+              value={vibes}
+              onChange={(e) => setVibes(e.target.value)}
+            >
               <option>Aesthetic</option>
               <option>Minimalis</option>
-              <option>Dreamy Pastel</option>
+              <option>Vintage</option>
               <option>Modern Mewah</option>
-              <option>Natural</option>
             </select>
 
-            <select className="select" onChange={(e) => setAngle(e.target.value)}>
-              <option value="">Pilih Angle</option>
+            <select
+              className="select"
+              value={angle}
+              onChange={(e) => setAngle(e.target.value)}
+            >
               <option>Close Up</option>
               <option>Medium Shot</option>
               <option>Full Body</option>
               <option>High Angle</option>
-              <option>Low Angle</option>
             </select>
+          </div>
+
+          <p className="label" style={{ marginTop: 16 }}>
+            Ratio
+          </p>
+          <div className="grid-3">
+            {["9:16", "1:1", "3:4"].map((r) => (
+              <button
+                key={r}
+                className={`chip ${ratio === r ? "active" : ""}`}
+                onClick={() => setRatio(r)}
+              >
+                {r}
+              </button>
+            ))}
           </div>
         </section>
 
-        {/* RATIO */}
-        <p className="label">Ratio</p>
-        <div className="grid-3">
-          {["9:16", "1:1", "3:4"].map((r) => (
-            <button
-              key={r}
-              className={`chip ${ratio === r ? "active" : ""}`}
-              onClick={() => setRatio(r)}
-            >
-              {r}
-            </button>
-          ))}
-        </div>
-
-        <button className="magic-btn" onClick={handleGenerate}>
+        {/* BUTANG UTAMA */}
+        <button
+          className="magic-btn"
+          onClick={handleGenerate}
+          disabled={loading}
+        >
           ✨ MERACIK KONTEN
         </button>
 
-        {/* HASIL */}
-        {hasilPrompt && (
-          <div className="result-box">
-            <h3>📄 Prompt AI</h3>
-            <pre>{hasilPrompt}</pre>
-          </div>
+        {/* HASIL PROMPT */}
+        {promptList.length > 0 && (
+          <section className="card">
+            <h3>📄 Pilih Prompt AI</h3>
+
+            {promptList.map((text, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: 12,
+                  borderRadius: 12,
+                  marginBottom: 10,
+                  border:
+                    activePrompt === text
+                      ? "2px solid #8b5cf6"
+                      : "1px solid #e5e7eb",
+                  background:
+                    activePrompt === text ? "#f5f3ff" : "#fff",
+                }}
+                onClick={() => setActivePrompt(text)}
+              >
+                <strong>Prompt {i + 1}</strong>
+                <p style={{ fontSize: 14, marginTop: 6 }}>{text}</p>
+
+                <button
+                  className="chip"
+                  style={{ marginTop: 8 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(text);
+                  }}
+                >
+                  📋 Salin Prompt
+                </button>
+              </div>
+            ))}
+          </section>
         )}
       </div>
 
-      {/* LOADING UX */}
+      {/* LOADING OVERLAY */}
       {loading && (
         <div className="loading-overlay">
           <div className="loading-box">
             <div className="magic-spinner"></div>
-            <p>AI sedang berfikir…</p>
+            <p className="loading-text">{loadingText}</p>
           </div>
         </div>
       )}
