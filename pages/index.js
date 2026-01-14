@@ -1,142 +1,184 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [affiliatePrompt, setAffiliatePrompt] = useState("");
-  const [loadingPrompt, setLoadingPrompt] = useState(false);
-  const [promptResult, setPromptResult] = useState("");
-  const [promptError, setPromptError] = useState("");
+  /* ===============================
+     STATE UTAMA
+  =============================== */
+  const [kategori, setKategori] = useState("Fashion");
 
-  async function handleGeneratePrompt() {
-    if (!affiliatePrompt.trim()) {
-      setPromptError("Sila masukkan ayat ringkas dahulu.");
-      return;
-    }
+  const [sceneModel, setSceneModel] = useState("Tanpa Model (Produk Sahaja)");
 
-    setLoadingPrompt(true);
-    setPromptResult("");
-    setPromptError("");
+  const [latar, setLatar] = useState("");
+  const [vibes, setVibes] = useState("");
+  const [angle, setAngle] = useState("");
+  const [ratio, setRatio] = useState("9:16");
 
-    try {
-      const res = await fetch("/api/affiliate-prompt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: affiliatePrompt,
-        }),
+  const [loading, setLoading] = useState(false);
+
+  /* ===============================
+     HANDLE AKHIR (BUKAN AI LAGI)
+  =============================== */
+  const handleGenerate = () => {
+    setLoading(true);
+
+    // simulasi proses (nanti baru sambung AI)
+    setTimeout(() => {
+      console.log("DATA PILIHAN USER:", {
+        kategori,
+        sceneModel,
+        latar,
+        vibes,
+        angle,
+        ratio,
       });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.result) {
-        throw new Error(data.error || "AI gagal menjana prompt.");
-      }
-
-      setPromptResult(data.result);
-    } catch (err) {
-      setPromptError(err.message);
-    } finally {
-      setLoadingPrompt(false);
-    }
-  }
+      setLoading(false);
+      alert("Konten berjaya diracik (demo UI sahaja)");
+    }, 2000);
+  };
 
   return (
-    <div className="app">
-      <h1 className="title">✨ AI Product Studio</h1>
+    <>
+      <div className="app">
+        <h1 className="title">✨ AI Product Studio</h1>
 
-      {/* ================= STEP 1 ================= */}
-      <section className="card">
-        <div className="card-header">
-          <span className="step">1</span>
-          <h2>Kategori Produk</h2>
-        </div>
-        <div className="grid-2">
-          <button className="chip active">Fashion</button>
-          <button className="chip">Aksesori</button>
-          <button className="chip">F&B</button>
-          <button className="chip">Lainnya</button>
-        </div>
-      </section>
+        {/* ===============================
+            1. KATEGORI PRODUK
+        =============================== */}
+        <section className="card">
+          <div className="card-header">
+            <span className="step">1</span>
+            <h2>Kategori Produk</h2>
+          </div>
 
-      {/* ================= STEP 2 ================= */}
-      <section className="card">
-        <div className="card-header">
-          <span className="step">2</span>
-          <h2>Pengaturan Scene</h2>
-        </div>
-        <select className="select">
-          <option>Tanpa Model (Produk Sahaja)</option>
-          <option>Wanita</option>
-          <option>Lelaki</option>
-        </select>
-      </section>
+          <div className="grid-2">
+            {["Fashion", "Aksesori", "F&B", "Lainnya"].map((item) => (
+              <button
+                key={item}
+                className={`chip ${kategori === item ? "active" : ""}`}
+                onClick={() => setKategori(item)}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </section>
 
-      {/* ================= STEP 3 ================= */}
-      <section className="card">
-        <div className="card-header">
-          <span className="step">3</span>
-          <h2>Styling</h2>
-        </div>
-        <select className="select">
-          <option>Pilih Latar</option>
-          <option>Studio</option>
-          <option>Outdoor</option>
-        </select>
+        {/* ===============================
+            2. PENGATURAN SCENE
+        =============================== */}
+        <section className="card">
+          <div className="card-header">
+            <span className="step">2</span>
+            <h2>Pengaturan Scene</h2>
+          </div>
 
-        <div className="grid-2">
-          <select className="select">
-            <option>Pilih Vibes</option>
-            <option>Aesthetic</option>
-            <option>Minimal</option>
+          <select
+            className="select"
+            value={sceneModel}
+            onChange={(e) => setSceneModel(e.target.value)}
+          >
+            <option>Tanpa Model (Produk Sahaja)</option>
+            <option>Wanita Berhijab</option>
+            <option>Wanita Non-Hijab</option>
+            <option>Pria</option>
+            <option>Anak Perempuan</option>
+            <option>Anak Laki-laki</option>
           </select>
-          <select className="select">
-            <option>Pilih Angle</option>
-            <option>Close-up</option>
-            <option>Wide</option>
+        </section>
+
+        {/* ===============================
+            3. STYLING
+        =============================== */}
+        <section className="card">
+          <div className="card-header">
+            <span className="step">3</span>
+            <h2>Styling</h2>
+          </div>
+
+          <select
+            className="select"
+            value={latar}
+            onChange={(e) => setLatar(e.target.value)}
+          >
+            <option value="">Pilih Latar</option>
+            <option>Studio Foto Minimalis</option>
+            <option>Jalanan Kota</option>
+            <option>Kafe Outdoor</option>
+            <option>Pantai</option>
+            <option>Kantor (Office Style)</option>
           </select>
-        </div>
 
-        <p className="label">Ratio</p>
-        <div className="grid-3">
-          <button className="chip active">9:16</button>
-          <button className="chip">1:1</button>
-          <button className="chip">3:4</button>
-        </div>
-      </section>
+          <div style={{ height: 12 }} />
 
-      {/* ================= STEP 4 ================= */}
-      <section className="card">
-        <div className="card-header">
-          <span className="step">4</span>
-          <h2>AI Affiliate Magic Prompt</h2>
-        </div>
+          <div className="grid-2">
+            <select
+              className="select"
+              value={vibes}
+              onChange={(e) => setVibes(e.target.value)}
+            >
+              <option value="">Pilih Vibes</option>
+              <option>Aesthetic</option>
+              <option>Minimalis</option>
+              <option>Dreamy Pastel</option>
+              <option>Modern Mewah</option>
+              <option>Natural</option>
+              <option>Serene & Calm</option>
+            </select>
 
-        <textarea
-          className="textarea"
-          placeholder="Contoh: wanita jual jam rosak"
-          value={affiliatePrompt}
-          onChange={(e) => setAffiliatePrompt(e.target.value)}
-        />
+            <select
+              className="select"
+              value={angle}
+              onChange={(e) => setAngle(e.target.value)}
+            >
+              <option value="">Pilih Angle</option>
+              <option>Close Up</option>
+              <option>Medium Shot</option>
+              <option>Full Body / Wide</option>
+              <option>High Angle</option>
+              <option>Low Angle</option>
+            </select>
+          </div>
 
+          <p className="label" style={{ marginTop: 16 }}>
+            Ratio
+          </p>
+
+          <div className="grid-3">
+            {["9:16", "1:1", "3:4"].map((r) => (
+              <button
+                key={r}
+                className={`chip ${ratio === r ? "active" : ""}`}
+                onClick={() => setRatio(r)}
+              >
+                {r}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* ===============================
+            BUTANG AKHIR
+        =============================== */}
         <button
           className="magic-btn"
-          onClick={handleGeneratePrompt}
-          disabled={loadingPrompt}
+          onClick={handleGenerate}
+          disabled={loading}
         >
-          {loadingPrompt ? "AI SEDANG MENJANA..." : "✨ GENERATE PROMPT"}
+          {loading ? "MERACIK KONTEN…" : "✨ MERACIK KONTEN"}
         </button>
+      </div>
 
-        {promptError && (
-          <div className="prompt-result" style={{ background: "#7f1d1d" }}>
-            {promptError}
+      {/* ===============================
+          LOADING OVERLAY
+      =============================== */}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-box">
+            <div className="magic-spinner"></div>
+            <p className="loading-text">✨ Sedang meracik konten…</p>
           </div>
-        )}
-
-        {promptResult && (
-          <div className="prompt-result">{promptResult}</div>
-        )}
-      </section>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
