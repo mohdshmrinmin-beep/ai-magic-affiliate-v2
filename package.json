@@ -1,5 +1,5 @@
 {
-  "name": "ai-magic-affiliate",
+  "name": "ai-magic-affiliate-v2",
   "private": true,
   "scripts": {
     "dev": "next dev",
