@@ -2,38 +2,113 @@ import { useState } from "react";
 
 export default function Home() {
   /* ===============================
-     STATE UTAMA
+     STATE
   =============================== */
   const [kategori, setKategori] = useState("Fashion");
-
   const [sceneModel, setSceneModel] = useState("Tanpa Model (Produk Sahaja)");
-
   const [latar, setLatar] = useState("");
   const [vibes, setVibes] = useState("");
   const [angle, setAngle] = useState("");
   const [ratio, setRatio] = useState("9:16");
 
   const [loading, setLoading] = useState(false);
+  const [aiResult, setAiResult] = useState("");
+  const [error, setError] = useState("");
+
+  const [selectedPrompt, setSelectedPrompt] = useState("");
+  const [imageLoading, setImageLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+
+  /* UX MAHAL */
+  const thinkingTexts = [
+    "AI sedang menganalisis produk…",
+    "Menentukan gaya visual terbaik…",
+    "Merangka prompt profesional…",
+    "Menjana imej AI berkualiti tinggi…",
+  ];
+  const [thinkingIndex, setThinkingIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   /* ===============================
-     HANDLE AKHIR (BUKAN AI LAGI)
+     GENERATE PROMPT (GEMINI)
   =============================== */
-  const handleGenerate = () => {
+  const handleGeneratePrompt = async () => {
     setLoading(true);
+    setAiResult("");
+    setError("");
+    setSelectedPrompt("");
+    setImageUrl("");
+    setThinkingIndex(0);
+    setProgress(0);
 
-    // simulasi proses (nanti baru sambung AI)
-    setTimeout(() => {
-      console.log("DATA PILIHAN USER:", {
-        kategori,
-        sceneModel,
-        latar,
-        vibes,
-        angle,
-        ratio,
+    const textInterval = setInterval(() => {
+      setThinkingIndex((i) =>
+        i < thinkingTexts.length - 1 ? i + 1 : i
+      );
+    }, 1200);
+
+    const progressInterval = setInterval(() => {
+      setProgress((p) => (p < 90 ? p + 5 : p));
+    }, 400);
+
+    try {
+      const res = await fetch("/api/generate-prompt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          kategori,
+          sceneModel,
+          latar,
+          vibes,
+          angle,
+          ratio,
+        }),
       });
-      setLoading(false);
-      alert("Konten berjaya diracik (demo UI sahaja)");
-    }, 2000);
+
+      const data = await res.json();
+      if (!res.ok || !data.result) {
+        throw new Error(data.error || "Gagal menjana prompt AI");
+      }
+
+      setProgress(100);
+      setAiResult(data.result);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      clearInterval(textInterval);
+      clearInterval(progressInterval);
+      setTimeout(() => setLoading(false), 600);
+    }
+  };
+
+  /* ===============================
+     GENERATE IMAGE (POLLING STABIL)
+  =============================== */
+  const handleGenerateImage = async () => {
+    if (!selectedPrompt) return;
+
+    setImageLoading(true);
+    setImageUrl("");
+
+    try {
+      const res = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: selectedPrompt }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.image) {
+        throw new Error(data.error || "Imej AI gagal dijana");
+      }
+
+      setImageUrl(data.image);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setImageLoading(false);
+    }
   };
 
   return (
@@ -41,37 +116,31 @@ export default function Home() {
       <div className="app">
         <h1 className="title">✨ AI Product Studio</h1>
 
-        {/* ===============================
-            1. KATEGORI PRODUK
-        =============================== */}
+        {/* STEP 1 */}
         <section className="card">
           <div className="card-header">
             <span className="step">1</span>
             <h2>Kategori Produk</h2>
           </div>
-
           <div className="grid-2">
-            {["Fashion", "Aksesori", "F&B", "Lainnya"].map((item) => (
+            {["Fashion", "Aksesori", "F&B", "Lainnya"].map((k) => (
               <button
-                key={item}
-                className={`chip ${kategori === item ? "active" : ""}`}
-                onClick={() => setKategori(item)}
+                key={k}
+                className={`chip ${kategori === k ? "active" : ""}`}
+                onClick={() => setKategori(k)}
               >
-                {item}
+                {k}
               </button>
             ))}
           </div>
         </section>
 
-        {/* ===============================
-            2. PENGATURAN SCENE
-        =============================== */}
+        {/* STEP 2 */}
         <section className="card">
           <div className="card-header">
             <span className="step">2</span>
             <h2>Pengaturan Scene</h2>
           </div>
-
           <select
             className="select"
             value={sceneModel}
@@ -81,68 +150,40 @@ export default function Home() {
             <option>Wanita Berhijab</option>
             <option>Wanita Non-Hijab</option>
             <option>Pria</option>
-            <option>Anak Perempuan</option>
-            <option>Anak Laki-laki</option>
           </select>
         </section>
 
-        {/* ===============================
-            3. STYLING
-        =============================== */}
+        {/* STEP 3 */}
         <section className="card">
           <div className="card-header">
             <span className="step">3</span>
             <h2>Styling</h2>
           </div>
 
-          <select
-            className="select"
-            value={latar}
-            onChange={(e) => setLatar(e.target.value)}
-          >
+          <select className="select" onChange={(e) => setLatar(e.target.value)}>
             <option value="">Pilih Latar</option>
-            <option>Studio Foto Minimalis</option>
-            <option>Jalanan Kota</option>
+            <option>Studio Foto</option>
             <option>Kafe Outdoor</option>
             <option>Pantai</option>
-            <option>Kantor (Office Style)</option>
           </select>
 
-          <div style={{ height: 12 }} />
-
-          <div className="grid-2">
-            <select
-              className="select"
-              value={vibes}
-              onChange={(e) => setVibes(e.target.value)}
-            >
+          <div className="grid-2" style={{ marginTop: 12 }}>
+            <select className="select" onChange={(e) => setVibes(e.target.value)}>
               <option value="">Pilih Vibes</option>
               <option>Aesthetic</option>
               <option>Minimalis</option>
-              <option>Dreamy Pastel</option>
-              <option>Modern Mewah</option>
-              <option>Natural</option>
-              <option>Serene & Calm</option>
+              <option>Eksklusif</option>
             </select>
 
-            <select
-              className="select"
-              value={angle}
-              onChange={(e) => setAngle(e.target.value)}
-            >
+            <select className="select" onChange={(e) => setAngle(e.target.value)}>
               <option value="">Pilih Angle</option>
               <option>Close Up</option>
-              <option>Medium Shot</option>
-              <option>Full Body / Wide</option>
-              <option>High Angle</option>
-              <option>Low Angle</option>
+              <option>Wide Shot</option>
+              <option>POV</option>
             </select>
           </div>
 
-          <p className="label" style={{ marginTop: 16 }}>
-            Ratio
-          </p>
-
+          <p className="label" style={{ marginTop: 16 }}>Ratio</p>
           <div className="grid-3">
             {["9:16", "1:1", "3:4"].map((r) => (
               <button
@@ -156,26 +197,75 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ===============================
-            BUTANG AKHIR
-        =============================== */}
-        <button
-          className="magic-btn"
-          onClick={handleGenerate}
-          disabled={loading}
-        >
-          {loading ? "MERACIK KONTEN…" : "✨ MERACIK KONTEN"}
+        {/* GENERATE PROMPT */}
+        <button className="magic-btn" onClick={handleGeneratePrompt}>
+          ✨ MERACIK KONTEN
         </button>
+
+        {/* PROMPT RESULT */}
+        {aiResult && (
+          <section className="card">
+            <h2>📄 Pilih Prompt</h2>
+            {aiResult
+              .split("\n")
+              .filter((l) => /^\d\./.test(l))
+              .map((p, i) => (
+                <button
+                  key={i}
+                  className={`chip ${selectedPrompt === p ? "active" : ""}`}
+                  style={{ marginBottom: 8 }}
+                  onClick={() => setSelectedPrompt(p)}
+                >
+                  {p}
+                </button>
+              ))}
+          </section>
+        )}
+
+        {/* GENERATE IMAGE */}
+        {selectedPrompt && (
+          <button className="magic-btn" onClick={handleGenerateImage}>
+            🎨 Jana Gambar AI
+          </button>
+        )}
+
+        {imageLoading && <p>⏳ Menjana imej AI…</p>}
+
+        {imageUrl && (
+          <section className="card">
+            <h2>🖼️ Hasil Imej AI</h2>
+            <img
+              src={imageUrl}
+              alt="AI Result"
+              style={{ width: "100%", borderRadius: 16 }}
+            />
+          </section>
+        )}
+
+        {error && <p style={{ color: "red" }}>❌ {error}</p>}
       </div>
 
-      {/* ===============================
-          LOADING OVERLAY
-      =============================== */}
+      {/* LOADING OVERLAY */}
       {loading && (
         <div className="loading-overlay">
           <div className="loading-box">
             <div className="magic-spinner"></div>
-            <p className="loading-text">✨ Sedang meracik konten…</p>
+            <p className="loading-text">
+              ✨ {thinkingTexts[thinkingIndex]}
+            </p>
+            <div style={{
+              marginTop: 12,
+              height: 8,
+              background: "rgba(255,255,255,0.2)",
+              borderRadius: 999,
+            }}>
+              <div style={{
+                width: `${progress}%`,
+                height: "100%",
+                background: "linear-gradient(90deg,#ec4899,#8b5cf6)",
+                transition: "width 0.4s ease",
+              }} />
+            </div>
           </div>
         </div>
       )}
