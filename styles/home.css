@@ -1,1 +1,73 @@
 
+body {
+  margin: 0;
+  background: #f6f7fb;
+  font-family: system-ui, sans-serif;
+}
+
+.app {
+  max-width: 420px;
+  margin: auto;
+  padding: 16px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.upload-box {
+  border: 2px dashed #ddd;
+  padding: 20px;
+  text-align: center;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.category,
+.ratio {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.category button,
+.ratio button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+button.active {
+  border-color: #ff4fd8;
+  background: #ffe8f8;
+}
+
+.select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.generate {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(90deg, #ff4fd8, #7c5cff);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
