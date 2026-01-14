@@ -1,6 +1,6 @@
 /* ===============================
    GLOBAL RESET
-   =============================== */
+=============================== */
 * {
   box-sizing: border-box;
 }
@@ -14,7 +14,7 @@ body {
 
 /* ===============================
    APP LAYOUT
-   =============================== */
+=============================== */
 .app {
   max-width: 420px;
   margin: 0 auto;
@@ -25,11 +25,12 @@ body {
   font-size: 22px;
   font-weight: 800;
   margin-bottom: 16px;
+  text-align: center;
 }
 
 /* ===============================
    CARD
-   =============================== */
+=============================== */
 .card {
   background: #fff;
   border-radius: 20px;
@@ -65,7 +66,7 @@ body {
 
 /* ===============================
    UPLOAD BOX
-   =============================== */
+=============================== */
 .upload-box {
   border: 2px dashed #f9a8d4;
   background: #fff1f7;
@@ -82,7 +83,7 @@ body {
 
 /* ===============================
    LABEL
-   =============================== */
+=============================== */
 .label {
   font-weight: 700;
   margin-bottom: 10px;
@@ -90,7 +91,7 @@ body {
 
 /* ===============================
    GRID
-   =============================== */
+=============================== */
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -101,12 +102,12 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  margin-bottom: 28px; /* ✅ FIX RATIO KE BUTTON */
+  margin-bottom: 28px;
 }
 
 /* ===============================
    CHIP / CATEGORY
-   =============================== */
+=============================== */
 .chip {
   background: #fff;
   border: 1.5px solid #eee;
@@ -129,9 +130,10 @@ body {
 
 /* ===============================
    SELECT & INPUT
-   =============================== */
+=============================== */
 .select,
-.input {
+.input,
+.textarea {
   width: 100%;
   padding: 14px;
   border-radius: 14px;
@@ -140,9 +142,14 @@ body {
   background: #fff;
 }
 
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
 /* ===============================
    MAGIC BUTTON
-   =============================== */
+=============================== */
 .magic-btn {
   width: 100%;
   padding: 16px;
@@ -155,7 +162,7 @@ body {
   box-shadow: 0 10px 25px rgba(236, 72, 153, 0.35);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   cursor: pointer;
-  margin-top: 10px; /* ✅ FIX JARAK DENGAN RATIO */
+  margin-top: 10px;
 }
 
 .magic-btn:active {
@@ -169,7 +176,7 @@ body {
 
 /* ===============================
    LOADING OVERLAY
-   =============================== */
+=============================== */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -200,7 +207,7 @@ body {
 
 /* ===============================
    SPINNER
-   =============================== */
+=============================== */
 .magic-spinner {
   width: 52px;
   height: 52px;
@@ -217,92 +224,9 @@ body {
   }
 }
 
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: #f5f6fa;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #111;
-}
-
-/* ===== APP ===== */
-.app {
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
-.title {
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-/* ===== CARD ===== */
-.card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.step {
-  background: #eee;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-}
-
-/* ===== TEXTAREA ===== */
-.textarea {
-  width: 100%;
-  min-height: 120px;
-  padding: 14px;
-  border-radius: 14px;
-  border: 1.5px solid #ddd;
-  font-size: 15px;
-  resize: vertical;
-  margin-bottom: 14px;
-}
-
-/* ===== BUTTON ===== */
-.magic-btn {
-  width: 100%;
-  padding: 14px;
-  border-radius: 16px;
-  border: none;
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  cursor: pointer;
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
-  box-shadow: 0 10px 25px rgba(236, 72, 153, 0.35);
-  transition: transform 0.15s ease;
-}
-
-.magic-btn:active {
-  transform: scale(0.97);
-}
-
-.magic-btn:disabled {
-  opacity: 0.6;
-}
-
-/* ===== RESULT ===== */
+/* ===============================
+   PROMPT RESULT
+=============================== */
 .prompt-result {
   white-space: pre-wrap;
   background: #0f172a;
