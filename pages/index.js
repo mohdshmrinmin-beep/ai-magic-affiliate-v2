@@ -1,101 +1,112 @@
-import { useState } from "react";
-
 export default function Home() {
-  const [category, setCategory] = useState("Fashion");
-  const [ratio, setRatio] = useState("9:16");
-
   return (
     <div className="app">
-      <header className="header">
-        <span className="logo">✨</span>
-        <h1>AI Product Studio</h1>
-      </header>
+      <h1 className="title">✨ AI Product Studio</h1>
 
-      {/* STEP 1 */}
+      {/* 1. Upload Produk */}
       <section className="card">
-        <div className="card-title">
-          <span>1</span>
+        <div className="card-header">
+          <span className="step">1</span>
           <h2>Upload Produk</h2>
-          <small>WAJIB</small>
+          <span className="required">WAJIB</span>
         </div>
 
         <div className="upload-box">
-          <p>Klik atau drop foto produk</p>
-          <small>Format JPG, PNG, WebP</small>
+          <div className="upload-icon">⬆️</div>
+          <p>Klik atau drop foto di sini</p>
+          <small>Format JPG, PNG (Max 5MB)</small>
         </div>
 
         <p className="label">Kategori Produk</p>
-        <div className="category-grid">
-          {["Fashion", "Aksesori & Tas", "F&B", "Lainnya"].map((item) => (
-            <button
-              key={item}
-              className={category === item ? "active" : ""}
-              onClick={() => setCategory(item)}
-            >
-              {item}
-            </button>
-          ))}
+        <div className="grid-2">
+          <button className="chip active">👕 Fashion</button>
+          <button className="chip">👜 Aksesori & Tas</button>
+          <button className="chip">☕ F&B</button>
+          <button className="chip">📦 Lainnya</button>
         </div>
       </section>
 
-      {/* STEP 2 */}
+      {/* 2. Pengaturan Scene */}
       <section className="card">
-        <div className="card-title">
-          <span>2</span>
+        <div className="card-header">
+          <span className="step">2</span>
           <h2>Pengaturan Scene</h2>
         </div>
 
-        <div className="tabs">
-          <button className="active">Model AI</button>
-          <button>Upload Sendiri</button>
+        <div className="toggle">
+          <button className="toggle-btn active">Model AI</button>
+          <button className="toggle-btn">Upload Sendiri</button>
         </div>
 
-        <select>
+        <select className="select">
           <option>Tanpa Model (Produk Sahaja)</option>
+          <option>Wanita Berhijab</option>
+          <option>Wanita Non-Hijab</option>
+          <option>Pria</option>
+          <option>Anak Perempuan</option>
+          <option>Anak Laki-laki</option>
         </select>
       </section>
 
-      {/* STEP 3 */}
+      {/* 3. Styling */}
       <section className="card">
-        <div className="card-title">
-          <span>3</span>
+        <div className="card-header">
+          <span className="step">3</span>
           <h2>Styling</h2>
         </div>
 
-        <select>
+        <select className="select">
+          <option>Pilih Latar Scene</option>
           <option>Studio Foto Minimalis</option>
+          <option>Jalanan Kota (Street Style)</option>
+          <option>Kafe Outdoor</option>
+          <option>Pantai</option>
+          <option>Kantor (Office Style)</option>
         </select>
 
-        <div className="row">
-          <select>
+        <div className="grid-2">
+          <select className="select">
+            <option>Pilih Vibes</option>
             <option>Aesthetic</option>
+            <option>Minimalis</option>
+            <option>Modern Mewah</option>
+            <option>Cozy / Hangat</option>
           </select>
-          <select>
-            <option>Pilih Angle (Default)</option>
+
+          <select className="select">
+            <option>Pilih Angle</option>
+            <option>Close Up</option>
+            <option>Medium Shot</option>
+            <option>Full Body / Wide Shot</option>
           </select>
         </div>
 
         <input
-          type="text"
+          className="input"
           placeholder="Tambahkan detail prompt manual... (opsional)"
         />
 
         <p className="label">Ratio</p>
-        <div className="ratio">
-          {["9:16", "1:1", "3:4"].map((r) => (
-            <button
-              key={r}
-              className={ratio === r ? "active" : ""}
-              onClick={() => setRatio(r)}
-            >
-              {r}
-            </button>
-          ))}
+        <div className="grid-3">
+          <button className="ratio active">9:16</button>
+          <button className="ratio">1:1</button>
+          <button className="ratio">3:4</button>
         </div>
 
-        <button className="generate">
-          ✨ GENERATE MAGIC
-        </button>
+        <button className="cta">✨ GENERATE MAGIC</button>
+      </section>
+
+      {/* Hasil */}
+      <section className="card">
+        <div className="card-header">
+          <h2>✨ Hasil Studio</h2>
+          <button className="small-btn">🔄 Ulangi</button>
+        </div>
+
+        <div className="grid-2">
+          <div className="result-box">AI Generated</div>
+          <div className="result-box">AI Generated</div>
+        </div>
       </section>
     </div>
   );
