@@ -1,47 +1,133 @@
+* {
+  box-sizing: border-box;
+  font-family: Inter, system-ui, sans-serif;
+}
+
 body {
   margin: 0;
-  padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #f5f6fa;
+  background: #f6f7fb;
 }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 24px;
+.app {
+  max-width: 420px;
+  margin: auto;
+  padding: 16px;
 }
 
-textarea {
-  width: 100%;
-  min-height: 140px;
-  padding: 14px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  outline: none;
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-button {
-  width: 100%;
-  margin-top: 16px;
-  padding: 14px;
-  font-size: 16px;
+.header h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.card-title span {
+  background: #f1f1f1;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
   font-weight: bold;
-  border: none;
+}
+
+.card-title small {
+  margin-left: auto;
+  color: #ff5a5a;
+  font-size: 12px;
+}
+
+.upload-box {
+  border: 2px dashed #ddd;
   border-radius: 12px;
-  background: linear-gradient(90deg, #7c3aed, #ec4899);
-  color: white;
+  padding: 24px;
+  text-align: center;
+  color: #777;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-size: 12px;
+  margin: 12px 0 6px;
+  color: #666;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.category-grid button,
+.tabs button,
+.ratio button {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 12px;
+  background: #fff;
   cursor: pointer;
 }
 
-button:disabled {
-  opacity: 0.6;
+.category-grid button.active,
+.tabs button.active,
+.ratio button.active {
+  border-color: #d946ef;
+  background: #fde7ff;
 }
 
-.result {
-  margin-top: 24px;
-  background: white;
-  padding: 16px;
-  border-radius: 12px;
-  white-space: pre-wrap;
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+select,
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.ratio {
+  display: flex;
+  gap: 8px;
+}
+
+.generate {
+  margin-top: 12px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  cursor: pointer;
 }
