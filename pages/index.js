@@ -10,14 +10,35 @@ export default function Home() {
   const [ratio, setRatio] = useState("9:16");
   const [loading, setLoading] = useState(false);
   const [hasil, setHasil] = useState(false);
+  const [prompts, setPrompts] = useState([]);
+
+  const generateAffiliatePrompts = () => {
+    const base = `A professional ${kategori.toLowerCase()} product photography featuring ${model.toLowerCase()}, set in ${latar.toLowerCase() || "a clean studio environment"}, with a ${vibes.toLowerCase() || "modern"} vibe. Camera angle: ${angle || "default angle"}. Aspect ratio ${ratio}. High-resolution, realistic lighting, commercial quality, suitable for social media ads and affiliate marketing.`;
+
+    const styles = [
+      "cinematic lighting, shallow depth of field, premium commercial look",
+      "soft natural lighting, lifestyle aesthetic, warm tones",
+      "high-end studio lighting, clean composition, luxury brand feel",
+      "dramatic contrast lighting, eye-catching composition",
+      "social-media optimized framing, viral-ready visual appeal",
+    ];
+
+    const results = styles.map(
+      (style, i) => `${i + 1}. ${base} Style: ${style}.`
+    );
+
+    setPrompts(results);
+  };
 
   const handleGenerate = () => {
     setLoading(true);
     setHasil(false);
+    setPrompts([]);
 
     setTimeout(() => {
       setLoading(false);
       setHasil(true);
+      generateAffiliatePrompts();
     }, 3000);
   };
 
@@ -177,19 +198,36 @@ export default function Home() {
 
         {/* ================= HASIL ================= */}
         {hasil && (
-          <section className="card">
-            <div className="card-header">
-              <h2>✨ Hasil Studio</h2>
-              <button className="chip" onClick={handleGenerate}>
-                🔁 Ulangi
-              </button>
-            </div>
+          <>
+            <section className="card">
+              <div className="card-header">
+                <h2>✨ Hasil Studio</h2>
+                <button className="chip" onClick={handleGenerate}>
+                  🔁 Ulangi
+                </button>
+              </div>
 
-            <div className="grid-2">
-              <div className="result-box">AI Generated</div>
-              <div className="result-box">AI Generated</div>
-            </div>
-          </section>
+              <div className="grid-2">
+                <div className="result-box">AI Generated</div>
+                <div className="result-box">AI Generated</div>
+              </div>
+            </section>
+
+            {/* ===== AI AFFILIATE PROMPT ===== */}
+            <section className="card">
+              <div className="card-header">
+                <h2>✨ AI Affiliate Magic Prompt</h2>
+              </div>
+
+              <div className="prompt-box">
+                {prompts.map((p, i) => (
+                  <div key={i} className="prompt-item">
+                    {p}
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
         )}
       </div>
 
